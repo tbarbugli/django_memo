@@ -1,16 +1,16 @@
 from django.forms import *
-from memo.models import Note
+from memo.models import *
 from memo.fields import HexColorField 
+from memo.widget import ColorRadioSelect
 
-class NoteForm(ModelForm):   
-    text = Textarea(attrs={'cols': 80, 'rows': 20})           
-    owner = HiddenInput()
-    top = HiddenInput()
-    left = HiddenInput()   
-    last_modified = HiddenInput()
-    
+class NoteForm(ModelForm):       
+    color = ModelChoiceField(Color.objects.all(), required= True, empty_label=None, widget=ColorRadioSelect)
     class Meta:
-        model = Note
-        
-	class Media:
-		js = ("/media/js/jquery/jquery-1.5.1.pack.js")
+        model = Note  
+        widgets = { 
+            'text': HiddenInput(attrs={'class': 'text'}), 
+            'top': HiddenInput(attrs={'class': 'top'}),
+            'left': HiddenInput(attrs={'class': 'left'}),
+            'last_modified': HiddenInput(),
+            'owner': HiddenInput()
+        }
