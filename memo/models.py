@@ -23,12 +23,12 @@ class Note(models.Model):
     
     """           
     
-    text = models.TextField(null=True)
+    text = models.TextField(blank= True, null=True)
     owner = models.ForeignKey(User)
-    visibility = models.CharField(max_length=30, choices= VISIBILITY_CHOICES)
+    visibility = models.CharField(max_length=30, choices= VISIBILITY_CHOICES, default="private")
     color = models.ForeignKey('Color', null= False, blank= False)
-    top = models.DecimalField(max_digits=5, decimal_places=2)
-    left = models.DecimalField(max_digits=5, decimal_places=2)    
+    top = models.DecimalField(max_digits=5, decimal_places=2, default='0')
+    left = models.DecimalField(max_digits=5, decimal_places=2, default='0')    
     last_modified = models.TimeField(auto_now=True, auto_now_add=False)
     
     objects = models.Manager()
@@ -36,11 +36,28 @@ class Note(models.Model):
     public = PublicNoteManager()   
     
     def get_absolute_url(self):
-        return "/notes/%i/" % self.pk   
+        return "/memo/notes/%i/" % self.pk   
         
 class Color(models.Model):
     name = models.CharField(max_length=30)
     code = models.CharField(max_length=7, validators= [hex_color_validator])  
     
+    @staticmethod
+    def default():
+        """
+        first draft implementation
+        """                       
+        for color in Color.objects.all():
+            return color
+            
     def __unicode__(self):
         return unicode(self.code)
+
+class NoteFollower(models.Model):
+    follower = models.ForeignKey(User)
+    note = models.ForeignKey(Note)
+    top = models.DecimalField(max_digits=5, decimal_places=2, default='0')
+    left = models.DecimalField(max_digits=5, decimal_places=2, default='0')
+    
+    def get_absolute_url(self):
+        return "/memo/follower_notes/%i/" % self.pk    

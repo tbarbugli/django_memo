@@ -1,0 +1,18 @@
+{% extends 'memo/note_list.html' %} 
+
+{% block javascript %} 
+<script src="/memo/media/js/notes.js" type="text/javascript"></script> 
+<script> 
+  $().ready(function(){ 
+    $(".user-gravatar").button().click(function(){ 
+      location.href = $(this).children().children("a").attr("href");
+    });
+    init_notes();  
+    $("a.remove").remove();    
+  });  
+</script>
+{% endblock %}         
+
+
+{% block body_bottom %}      
+{% endblock %}

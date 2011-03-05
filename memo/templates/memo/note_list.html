@@ -1,64 +1,64 @@
 {% extends 'memo/layout.html' %}
+{% load notes %} 
+{% load gravatar %}
 
-{% block javascript %}  
-<script>
-  function save_formset(){
-    
-  } 
-  
+{% block javascript %} 
+<script src="/memo/media/js/notes.js" type="text/javascript"></script> 
+<script>  
   $().ready(function(){
-    /*$(".back").hide();  */
-    $(".info_btn").button({
-      icons: {
-          primary: "ui-icon-info"
-      },
-      text: false
+    $("#empty_form").hide();           
+  	$("#add_note").button({
+        icons: {
+            primary: "ui-icon-circle-plus"
+        },
+    });  
+    $("#add_note").click(function(){
+      var form = $("#empty_form form");
+      $.ajax({
+        type: 'POST',
+        url: form.attr("action"),
+        data: form.serialize(), 
+        success: append_note
+      });
+    });    
+    $(".user-gravatar").button().click(function(){ 
+      location.href = $(this).children().children("a").attr("href");
     });
-    $(".done_btn").button();
-    $(".info_btn").click(function(){  
-      $(this).parent().next().show("slow");
-      $(this).parent().hide("slow");
-      return false;
-    });
-    $(".done_btn").click(function(){  
-      $(this).parent().prev().show("slow");
-      $(this).parent().hide("slow");
-      return false;
-    });
-    $(".note").draggable({
-      cancel: ".back, .text-side",
-      stop : function (event, ui) { 
-        var form = $(this).children("form");
-        form.find(".text").val($(this).find(".editable").text()); 
-        form.find(".top").val(ui.position.top);
-        form.find(".left").val(ui.position.left);  
-        id=9;
-        $.ajax({
-          type: 'POST',
-          url: form.attr("action"),
-          data: form.serialize(),
-        });    
-      }
-    });
+    init_notes();           
   });  
 </script>
 {% endblock %}
 
-{% block body_middle %}
-  {% for form in forms %} 
-    <div class="note ui-widget-content" style="left:{{form.left.value}}px;top:{{form.top.value}}px;position:absolute;">
-      <form action="/memo/notes/{{ form.instance.pk }}/">
-      <div class="text-side"> 
-       <section class="editable" contenteditable="true">{{ form.text.value }}</section>
-       <button class="info_btn">info</button>
-      </div>       
-      <div class="back">
-        {% for field in form %}
-            {{ field }}
-        {% endfor %}
-       <button class="done_btn">Done</button>        
-      </div> 
-    </form>
-    </div>
-  {% endfor %}
+{% block body_top %}
+  <div id="top">
+    <div class="user-gravatar">
+        <a href="{% url memo.views.dashboard %}">
+          <img src="{% gravatar_for_user user.username 48 %}" style="float:left;"/>   
+          <p class="name" style="margin-left:5px;float:left;"><b>{{ user.username }}</b> 
+        </a>  
+     </div>
+    {% for user in users %}
+      <div class="user-gravatar">
+        <a href="{% url memo.views.dashboard user.owner__id %}">
+          <img src="{% gravatar_for_user user.owner__username 48 %}" style="float:left;"/>   
+          <p class="name" style="margin-left:5px;float:left;"><b>{{ user.owner__username }}</b> 
+        </a>
+      </div>
+    {% endfor %}
+  </div>           
+{% endblock %}
+
+{% block body_middle %}  
+  <div id="notes">
+    {% for form in forms %}  
+      {% render_note_form form %}
+    {% endfor %}
+    {% for follow in followings %}  
+      {% render_note_form follow %}
+    {% endfor %}    
+  </div>
+{% endblock %}   
+
+{% block body_bottom %}      
+   <button id="add_note">Add Note</button>
 {% endblock %}

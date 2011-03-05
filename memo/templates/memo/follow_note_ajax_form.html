@@ -1,0 +1,14 @@
+<div class="note ui-widget-content" style="left:{{form.left.value}}px;top:{{form.top.value}}px;position:absolute;background:{{ form.instance.note.color }};">
+  <form action="/memo/follower_notes/{{ form.instance.pk }}/"> 
+  <div class="text-side">  
+   <section class="editable">{{ form.instance.note.text }}</section>   
+   </div>    
+    <div class="bottom">
+      <a href="/memo/follower_notes/{{ form.instance.pk }}/unfollow/" class="remove"></a>
+      {% for field in form %}          
+            {{ field }}          
+      {% endfor %}   
+    </div>                                                                   
+  </div>
+</form>  
+</div>

@@ -5,20 +5,34 @@ body {
   margin-top: 40px;
   padding: 0;
 }
-section {
-    max-height: 100px;
+.text-side {
+  height:140px;
+} 
+
+#top {
+  background: white;
+  height:70px;  
+  left:0px;     
+  top:0px;
+  right:0px;
+  position:absolute;  
+  padding-left:150px;
+}
+    
+#notes {
+  width:100%;
+  height:100%;
+  margin-top:75px;
+}
+section {       
+    max-height: 140px;
     width: 180px;
     margin: 10px;  
-    display:block;
+    display:block;  
 }
 .note {
   width: 200px; 
   height:200px;
-}
-
-.info_btn {
-  position:absolute;
-  
 }
 
 button.ui-button-icon-only {
@@ -42,3 +56,31 @@ div.color_buttons label {
   -webkit-border-bottom-right-radius: 0px;
   border-bottom-right-radius: 0px;
 }      
+
+#add_note {
+  display:block;
+  position:absolute;
+  left:5px;
+  top:15px;  
+  z-index:999;
+} 
+
+.bottom {
+  margin-top:2px;
+}
+
+.user-gravatar {
+  float:left;
+  margin:6px;
+  margin-right:3px;
+}   
+
+.remove {
+  background: transparent url('images/fancybox.png') -40px 0px;  
+  width:30px;
+  height:30px; 
+  float: left;
+  margin-top: -166px;
+  margin-left: -13px;
+  cursor:pointer;
+}

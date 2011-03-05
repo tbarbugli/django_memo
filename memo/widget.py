@@ -30,9 +30,10 @@ class ColorRadioSelect(RadioSelect):
             <script type="text/javascript">
             $().ready(function(){
                 $("#%(id)s").buttonset(); 
-                $("#id_color").children("label").each(function(){
-                    $(this).css("background", $(this).text()); $(this).html("&nbsp;")
-                });
+                $("#%(id)s").children("label").each(function(){
+                    $(this).css("background", $(this).text()); $(this).html("&nbsp;");
+                });                                                                   
+                $(".color_buttons").children(".ui-state-active").trigger("click");
             })
             </script>
             <div id="%(id)s" class="color_buttons">%(radio)s</div>

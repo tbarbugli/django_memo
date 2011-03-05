@@ -1,0 +1,21 @@
+<div {% if not form.instance.pk %} id="empty_form" {% endif %} class="note ui-widget-content" style="left:{{form.left.value}}px;top:{{form.top.value}}px;position:absolute;background:{{ form.color.label }};">
+  {% if form.instance.pk %}
+    <form action="/memo/notes/{{ form.instance.pk }}/"> 
+  {% else %}
+    <form action="/memo/notes/add/"> 
+  {% endif %}
+  <div class="text-side">  
+   <section class="editable" contenteditable="true">{{ form.text.value }}</section>   
+   </div>    
+    <div class="bottom">
+      <a href="/memo/notes/{{ form.instance.pk }}/delete/" class="remove"></a>
+      {% for field in form %}
+          {% if not field.is_hidden %}<p style="width:4em;margin:0px;margin-right:3px;margin-left:2px;float: left;">{{ field.label }}:</p>{{ field }}<br style="clear:both;" />
+          {% else %}
+            {{ field }}
+          {% endif %}           
+      {% endfor %}   
+    </div>                                                                   
+  </div>
+</form>  
+</div>
