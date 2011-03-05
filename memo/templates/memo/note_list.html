@@ -1,0 +1,64 @@
+{% extends 'memo/layout.html' %}
+
+{% block javascript %}  
+<script>
+  function save_formset(){
+    
+  } 
+  
+  $().ready(function(){
+    /*$(".back").hide();  */
+    $(".info_btn").button({
+      icons: {
+          primary: "ui-icon-info"
+      },
+      text: false
+    });
+    $(".done_btn").button();
+    $(".info_btn").click(function(){  
+      $(this).parent().next().show("slow");
+      $(this).parent().hide("slow");
+      return false;
+    });
+    $(".done_btn").click(function(){  
+      $(this).parent().prev().show("slow");
+      $(this).parent().hide("slow");
+      return false;
+    });
+    $(".note").draggable({
+      cancel: ".back, .text-side",
+      stop : function (event, ui) { 
+        var form = $(this).children("form");
+        form.find(".text").val($(this).find(".editable").text()); 
+        form.find(".top").val(ui.position.top);
+        form.find(".left").val(ui.position.left);  
+        id=9;
+        $.ajax({
+          type: 'POST',
+          url: form.attr("action"),
+          data: form.serialize(),
+        });    
+      }
+    });
+  });  
+</script>
+{% endblock %}
+
+{% block body_middle %}
+  {% for form in forms %} 
+    <div class="note ui-widget-content" style="left:{{form.left.value}}px;top:{{form.top.value}}px;position:absolute;">
+      <form action="/memo/notes/{{ form.instance.pk }}/">
+      <div class="text-side"> 
+       <section class="editable" contenteditable="true">{{ form.text.value }}</section>
+       <button class="info_btn">info</button>
+      </div>       
+      <div class="back">
+        {% for field in form %}
+            {{ field }}
+        {% endfor %}
+       <button class="done_btn">Done</button>        
+      </div> 
+    </form>
+    </div>
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,44 @@
+body { 
+  font: normal 14px/20px "Helvetica Neue", Helvetica, sans-serif;
+  background: rgb(237, 237, 236);
+  margin: 0;
+  margin-top: 40px;
+  padding: 0;
+}
+section {
+    max-height: 100px;
+    width: 180px;
+    margin: 10px;  
+    display:block;
+}
+.note {
+  width: 200px; 
+  height:200px;
+}
+
+.info_btn {
+  position:absolute;
+  
+}
+
+button.ui-button-icon-only {
+   width: 1.1em;
+   height: 1.1em; 
+}
+
+div.color_buttons label {
+  width: 1em;
+  height: 1em;
+  -moz-border-radius-topleft: 0px;
+  -webkit-border-top-left-radius: 0px;
+  border-top-left-radius: 0px;
+  -moz-border-radius-bottomleft: 0px;
+  -webkit-border-bottom-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  -moz-border-radius-topright: 6px;
+  -webkit-border-top-right-radius: 0px;
+  border-top-right-radius: 0px;
+  -moz-border-radius-bottomright: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}      
