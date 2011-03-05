@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 
 VISIBILITY_CHOICES = (
     ('private', 'private'),
@@ -59,5 +60,12 @@ class NoteFollower(models.Model):
     top = models.DecimalField(max_digits=5, decimal_places=2, default='0')
     left = models.DecimalField(max_digits=5, decimal_places=2, default='0')
     
+    class Meta:
+        unique_together = ("follower", "note")
+        
+    def clean(self):           
+        if self.note.owner == self.follower:
+            raise ValidationError('Owner and follower cant be the same user') 
+               
     def get_absolute_url(self):
         return "/memo/follower_notes/%i/" % self.pk    

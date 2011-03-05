@@ -53,9 +53,11 @@
     {% for form in forms %}  
       {% render_note_form form %}
     {% endfor %}
+    
     {% for follow in followings %}  
-      {% render_note_form follow %}
-    {% endfor %}    
+      {% render_follownote_form follow %}
+    {% endfor %}  
+      
   </div>
 {% endblock %}   
 

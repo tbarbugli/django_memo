@@ -12,7 +12,6 @@ Installation
 
 To install it, use pip::
 
-    pip install django-gravatar
     pip install -e git://github.com/tbarbugli/django_memo.git#egg=django_memo
 
 

@@ -4,7 +4,7 @@
    <section class="editable">{{ form.instance.note.text }}</section>   
    </div>    
     <div class="bottom">
-      <a href="/memo/follower_notes/{{ form.instance.pk }}/unfollow/" class="remove"></a>
+      <a href="/memo/unfollow/{{ form.instance.note.pk }}/" class="remove"></a>
       {% for field in form %}          
             {{ field }}          
       {% endfor %}   

@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -15,7 +16,7 @@ class NoteDeleteView(DeleteView):
     def get_object(self, queryset=None):    
         self.object = None
         user = self.request.user
-        obj = super(NoteUpdateView, self).get_object(queryset)
+        obj = super(NoteDeleteView, self).get_object(queryset)
         if obj.owner != user:            
             raise Http404(u"User is not allowed") 
         return obj
@@ -47,6 +48,7 @@ class NoteUpdateView(UpdateView):
 class NoteFollowerUpdateView(NoteUpdateView):
     queryset = NoteFollower.objects.all() 
     ajax_form = NoteFollowerForm 
+    ajax_template = "_form"
     
     def get_object(self, queryset=None):    
         self.object = None
@@ -63,7 +65,25 @@ class NoteCreateView(CreateView):
         if request.POST['owner'] != unicode(request.user.id):
             raise Http404(u"User is not allowed")    
         return super(NoteCreateView, self).post(request, *args, **kwargs)
-        
+
+@login_required
+def follow(request, note_id):
+    note = Note.objects.get(id= note_id)
+    fn = NoteFollower(note_id =note_id, follower= request.user) 
+    fn.top = note.top
+    fn.left = note.left    
+    try:  
+        fn.clean()                
+    except ValidationError, e:   
+        return HttpResponse("Something went wrong: %s" % e)
+    fn.save()
+    return HttpResponse() 
+    
+@login_required
+def unfollow(request, note_id):   
+    NoteFollower.objects.filter(follower= request.user, note__id= note_id).delete()
+    return HttpResponse()
+            
 @login_required              
 def dashboard(request, user_id= None):
     """
@@ -81,7 +101,8 @@ def dashboard(request, user_id= None):
         initial = {'owner': request.user}
         initial['color'] = Color.default()            
         forms = [NoteForm(initial= initial)] 
-        f_qs = NoteFollower.objects.filter(follower= request.user)            
+        f_qs = NoteFollower.objects.filter(follower= request.user) 
+        f_qs = f_qs.exclude(note__visibility= "private")           
         followings = [NoteFollowerForm(instance= nf, prefix= nf.id) for nf in f_qs]
 
     forms += [NoteForm(instance= note, prefix= note.id) for note in queryset]          
