@@ -2,9 +2,8 @@
 django-memo
 ===============
 
-django-memo a simple /example app for shared notes
-runs on django 1.3 and requires django-gravatar
-
+django-memo a simple/example app for shared notes
+runs on django >= 1.3 rc 1 and requires django-gravatar
 
 ************
 Installation
@@ -23,4 +22,8 @@ Usage
         # ...         
         'memo',
         'gravatar',
-    )
+    ) 
+
+let django copies static files to your static folder
+
+    ./manage.py collectstatic
