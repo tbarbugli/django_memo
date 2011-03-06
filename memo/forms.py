@@ -1,6 +1,5 @@
 from django.forms import *
 from memo.models import *
-from memo.fields import HexColorField 
 from memo.widget import ColorRadioSelect
 
 class NoteForm(ModelForm):       
