@@ -16,7 +16,7 @@
 {% block body_middle %}  
   <div id="notes">
     {% for form in forms %}  
-      {% render_publicnote_form form %}
+      {% render_publicnote_form form user %}
     {% endfor %}          
   </div>
 {% endblock %}

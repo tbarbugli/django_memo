@@ -1,12 +1,14 @@
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.views.generic import UpdateView, CreateView, DeleteView
 from django.template import RequestContext
 from django.http import Http404 
 from memo.models import Color, Note, NoteFollower
 from memo.forms import NoteForm, NoteFollowerForm
+from django.contrib.auth.views import redirect_to_login
+from django.core.urlresolvers import reverse
 
 class NoteDeleteView(DeleteView):
     queryset = Note.objects.all()
@@ -83,18 +85,21 @@ def unfollow(request, note_id):
     NoteFollower.objects.filter(follower= request.user, 
                                 note__id= note_id).delete()
     return HttpResponse()
-            
-@login_required              
+                          
 def dashboard(request, user_id= None):
     """
     returns the user note
     
-    """ 
+    """
+    if user_id is not None and unicode(request.user.id) == user_id:
+        return redirect("memo.views.dashboard")
+    elif user_id is None and not request.user.is_authenticated():
+        return redirect_to_login(reverse("memo.views.dashboard"))
     if user_id is not None:
         queryset = Note.public.filter(owner__id= user_id)
         template_name = "memo/public_note_list.html"
         forms = []   
-        followings = []
+        followings = []    
     else:
         queryset = Note.objects.filter(owner= request.user) 
         template_name = "memo/note_list.html"             

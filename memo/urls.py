@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.defaults import *
+from memo.feeds import PublicNoteFeed
 from memo.views import *  
 
 urlpatterns = patterns('memo.views',
@@ -11,5 +12,6 @@ urlpatterns = patterns('memo.views',
         login_required(NoteFollowerUpdateView.as_view())),
     (r'^follow/(?P<note_id>\d+)/$', 'follow'),
     (r'^unfollow/(?P<note_id>\d+)/$', 'unfollow'),            
-    (r'^notes/(?P<pk>\d+)/delete/$', login_required(NoteDeleteView.as_view())),   
+    (r'^notes/(?P<pk>\d+)/delete/$', login_required(NoteDeleteView.as_view())),      
+    (r'^notes/(?P<pk>\d+)/feed/$', PublicNoteFeed()), 
 )

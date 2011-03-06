@@ -7,7 +7,9 @@
   <div class="text-side">  
    <section class="editable">{{ form.text.value }}</section>   
    </div>   
-    <a href="/memo/follow/{{ form.instance.pk }}/" class="follow"></a> 
+    {% if can_follow %}
+      <a href="/memo/follow/{{ form.instance.pk }}/" class="follow"></a> 
+    {% endif %}
     <div class="bottom" style="display:none;">
       <a href="/memo/notes/{{ form.instance.pk }}/delete/" class="remove"></a>
       <a href="/memo/follow/{{ form.instance.pk }}/" class="follow"></a>

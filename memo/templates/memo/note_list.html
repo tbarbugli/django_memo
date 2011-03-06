@@ -31,12 +31,14 @@
 
 {% block body_top %}
   <div id="top">
-    <div class="user-gravatar">
-        <a href="{% url memo.views.dashboard %}">
-          <img src="{% gravatar_for_user user.username 48 %}" style="float:left;"/>   
-          <p class="name" style="margin-left:5px;float:left;"><b>{{ user.username }}</b> 
-        </a>  
-     </div>
+    {% if user.is_authenticated %}
+      <div class="user-gravatar">
+          <a href="{% url memo.views.dashboard %}">
+            <img src="{% gravatar_for_user user.username 48 %}" style="float:left;"/>   
+            <p class="name" style="margin-left:5px;float:left;"><b>{{ user.username }}</b> 
+          </a>  
+       </div> 
+    {% endif %}
     {% for user in users %}
       <div class="user-gravatar">
         <a href="{% url memo.views.dashboard user.owner__id %}">
