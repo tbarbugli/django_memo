@@ -5,15 +5,14 @@
     <form action="/memo/notes/add/"> 
   {% endif %}
   <div class="text-side">  
-   <section class="editable" contenteditable="true">{{ form.text.value }}</section>   
-   </div>    
-    <div class="bottom">
-      <a href="/memo/notes/{{ form.instance.pk }}/delete/" class="remove"></a>      
+   <section class="editable">{{ form.text.value }}</section>   
+   </div>   
+    <a href="/memo/follow/{{ form.instance.pk }}/" class="follow"></a> 
+    <div class="bottom" style="display:none;">
+      <a href="/memo/notes/{{ form.instance.pk }}/delete/" class="remove"></a>
+      <a href="/memo/follow/{{ form.instance.pk }}/" class="follow"></a>
       {% for field in form %}
-          {% if not field.is_hidden %}<p style="width:4em;margin:0px;margin-right:3px;margin-left:2px;float: left;">{{ field.label }}:</p>{{ field }}<br style="clear:both;" />
-          {% else %}
-            {{ field }}
-          {% endif %}           
+            {{ field }}      
       {% endfor %}   
     </div>                                                                   
   </div>

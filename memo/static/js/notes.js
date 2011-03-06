@@ -37,7 +37,7 @@ function init_notes()
       color = $(this).css("background-color");
       note.css("background", color);
   });   
-  $("a.remove").unbind('click');                     
+  $("a.remove, a.follow").unbind('click');                     
   $("a.remove").click(function(){       
     $.ajax({
       type: 'POST',
@@ -45,6 +45,15 @@ function init_notes()
       data: {}
     });
     $(this).parent().parent().parent().hide("puff");
+    return false;
+  });
+  $("a.follow").click(function(){       
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr("href"),
+      data: {}
+    });
+    $(this).hide("puff");
     return false;
   }); 
 }    

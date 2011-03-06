@@ -84,3 +84,13 @@ div.color_buttons label {
   margin-left: -13px;
   cursor:pointer;
 }
+
+.follow {
+  background: transparent url('images/add.png') no-repeat;  
+  width:34px;
+  height:34px; 
+  float: left;
+  margin-top: -166px;
+  margin-left: -13px;
+  cursor:pointer;
+}
