@@ -3,7 +3,7 @@
 {% load gravatar %}
 
 {% block javascript %} 
-<script src="/memo/media/js/notes.js" type="text/javascript"></script> 
+<script src="{{ STATIC_URL }}js/notes.js" type="text/javascript"></script> 
 <script>  
   $().ready(function(){
     $("#empty_form").hide();           
