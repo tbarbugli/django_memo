@@ -4,7 +4,8 @@ from memo.fields import HexColorField
 from memo.widget import ColorRadioSelect
 
 class NoteForm(ModelForm):       
-    color = ModelChoiceField(Color.objects.all(), empty_label=None, widget=ColorRadioSelect)
+    color = ModelChoiceField(Color.objects.all(), empty_label=None, 
+        widget=ColorRadioSelect)
 
     class Meta:
         model = Note  

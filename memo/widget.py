@@ -10,7 +10,8 @@ class UIRadioInput(RadioInput):
         else:
             label_for = ''
         choice_label = conditional_escape(force_unicode(self.choice_label)) 
-        return mark_safe(u'%s<label%s>%s</label>' % (self.tag(), label_for,  choice_label))
+        return mark_safe(u'%s<label%s>%s</label>' % (self.tag(), label_for,  
+                                                                choice_label))
         
 class UIRadioFieldRenderer(RadioFieldRenderer):
     def render(self):
@@ -19,7 +20,8 @@ class UIRadioFieldRenderer(RadioFieldRenderer):
                 % force_unicode(w) for w in self]))
     def __iter__(self):
         for i, choice in enumerate(self.choices):
-            yield UIRadioInput(self.name, self.value, self.attrs.copy(), choice, i)
+            yield UIRadioInput(self.name, self.value, self.attrs.copy(), 
+                choice, i)
                 
 class ColorRadioSelect(RadioSelect):    
     renderer = UIRadioFieldRenderer     
@@ -29,11 +31,12 @@ class ColorRadioSelect(RadioSelect):
         return mark_safe(u"""
             <script type="text/javascript">
             $().ready(function(){
-                $("#%(id)s").buttonset(); 
-                $("#%(id)s").children("label").each(function(){
-                    $(this).css("background", $(this).text()); $(this).html("&nbsp;");
-                });                                                                   
-                $(".color_buttons").children(".ui-state-active").trigger("click");
+            $("#%(id)s").buttonset(); 
+            $("#%(id)s").children("label").each(function(){
+                $(this).css("background", $(this).text()); 
+                $(this).html("&nbsp;");
+            });                                                                   
+            $(".color_buttons").children(".ui-state-active").trigger("click");
             })
             </script>
             <div id="%(id)s" class="color_buttons">%(radio)s</div>

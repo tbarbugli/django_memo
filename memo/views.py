@@ -5,8 +5,7 @@ from django.shortcuts import render_to_response
 from django.views.generic import UpdateView, CreateView, DeleteView
 from django.template import RequestContext
 from django.http import Http404 
-from django.contrib.auth.models import User
-from memo.models import *
+from memo.models import Color, Note, NoteFollower
 from memo.forms import NoteForm, NoteFollowerForm
 
 class NoteDeleteView(DeleteView):
@@ -81,7 +80,8 @@ def follow(request, note_id):
     
 @login_required
 def unfollow(request, note_id):   
-    NoteFollower.objects.filter(follower= request.user, note__id= note_id).delete()
+    NoteFollower.objects.filter(follower= request.user, 
+                                note__id= note_id).delete()
     return HttpResponse()
             
 @login_required              

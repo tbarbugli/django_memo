@@ -8,14 +8,15 @@ VISIBILITY_CHOICES = (
     ('public', 'public'),
 )
 
-hex_color_validator = RegexValidator('^\#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$', message="A valid hex color code is needed")
+hex_color_validator = RegexValidator('^\#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$', 
+    message="A valid hex color code is needed")
 
 class PublicNoteManager(models.Manager):
     def get_query_set(self):
         return super(PublicNoteManager, self).get_query_set().filter(visibility= 'public')
 
 class PrivateNoteManager(models.Manager):
-    def get_query_set(self):
+    def get_query_set(self):                   
         return super(PrivateNoteManager, self).get_query_set().filter(visibility= 'private')
             
 class Note(models.Model):
@@ -26,7 +27,8 @@ class Note(models.Model):
     
     text = models.TextField(blank= True, null=True)
     owner = models.ForeignKey(User)
-    visibility = models.CharField(max_length=30, choices= VISIBILITY_CHOICES, default="private")
+    visibility = models.CharField(max_length=30, choices= VISIBILITY_CHOICES, 
+        default="private")
     color = models.ForeignKey('Color', null= False, blank= False)
     top = models.DecimalField(max_digits=5, decimal_places=2, default='0')
     left = models.DecimalField(max_digits=5, decimal_places=2, default='0')    
@@ -36,6 +38,9 @@ class Note(models.Model):
     private = PrivateNoteManager()
     public = PublicNoteManager()   
     
+    def __unicode__(self):
+        return "%s ..." % self.text[:30]
+            
     def get_absolute_url(self):
         return "/memo/notes/%i/" % self.pk   
         

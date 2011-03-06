@@ -17,7 +17,7 @@ function init_notes()
     cancel: ".bottom, section",    
     stack: "#notes div", 
     containment: "#notes",
-    create: function() {if($(this).hasClass("shake")){$(this).effect("bounce");}},
+    create: function() {if($(this).hasClass("shake")){$(this).effect("bounce", "fast");}},
     stop : function (event, ui) { 
       var form = $(this).children("form");
       form.find(".text").val($(this).find(".editable").text()); 
@@ -51,10 +51,10 @@ function init_notes()
 
 function append_note(data){  
   var note = $(data);
-  note.css("top", "80");
+  note.css("top", "100");
   note.css("z-index", "999");
   note.css("left", "50");  
-  note.addClass("shake")
+  note.addClass("shake");
   $("#notes").append(note);    
   init_notes();       
 }
