@@ -7,7 +7,7 @@
   <div class="text-side">  
    <section class="editable">{{ form.text.value }}</section>   
    </div>   
-    {% if can_follow %}
+    {% if can_follow and form.instance.pk not in followed_notes %}
       <a href="/memo/follow/{{ form.instance.pk }}/" class="follow"></a> 
     {% endif %}
     <div class="bottom" style="display:none;">

@@ -37,7 +37,7 @@ function init_notes()
       color = $(this).css("background-color");
       note.css("background", color);
   });   
-  $("a.remove, a.follow").unbind('click');                     
+  $("a.remove").unbind('click');                     
   $("a.remove").click(function(){       
     $.ajax({
       type: 'POST',
@@ -46,18 +46,21 @@ function init_notes()
     });
     $(this).parent().parent().parent().hide("puff");
     return false;
-  });
-  $("a.follow").click(function(){       
-    $.ajax({
-      type: 'POST',
-      url: $(this).attr("href"),
-      data: {}
-    });
-    $(this).hide("puff");
-    return false;
   }); 
 }    
 
+function init_follow_btn(){   
+    $("a.follow").unbind('click');
+    $("a.follow").click(function(){       
+      $.ajax({
+        type: 'POST',
+        url: $(this).attr("href"),
+        data: {}
+      });
+      $(this).hide("puff");
+      return false;
+    });
+}
 function append_note(data){  
   var note = $(data);
   note.css("top", "100");
