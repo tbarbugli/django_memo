@@ -3,13 +3,13 @@
     <form action="/memo/notes/{{ form.instance.pk }}/"> 
   {% else %}
     <form action="/memo/notes/add/"> 
-  {% endif %}
+  {% endif %}
   <div class="text-side">  
    <section class="editable" contenteditable="true">
      {% if form.text.value %}
       {{ form.text.value }}
      {% else %}
-       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       your note text
      {% endif %}
    </section>   
    </div>    

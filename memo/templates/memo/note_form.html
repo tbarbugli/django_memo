@@ -3,7 +3,7 @@
   <form action="/memo/notes/{{ form.instance.pk }}/"> 
 {% else %}
   <form action="/memo/notes/add/"> 
-{% endif %}
+{% endif %}
   {% block body_middle %} 
     {{ form.as_p }}
   <input type="submit" />
