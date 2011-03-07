@@ -5,7 +5,13 @@
     <form action="/memo/notes/add/"> 
   {% endif %}
   <div class="text-side">  
-   <section class="editable" contenteditable="true">{{ form.text.value }}</section>   
+   <section class="editable" contenteditable="true">
+     {% if form.text.value %}
+      {{ form.text.value }}
+     {% else %}
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     {% endif %}
+   </section>   
    </div>    
     <div class="bottom">
       <a href="/memo/notes/{{ form.instance.pk }}/delete/" class="remove"></a>      

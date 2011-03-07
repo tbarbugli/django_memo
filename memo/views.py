@@ -24,14 +24,8 @@ class NoteDeleteView(DeleteView):
         
 class NoteUpdateView(UpdateView):
     queryset = Note.objects.all()        
-    ajax_form = NoteForm
-    ajax_template = "_ajax_form"
-    
-    def get(self, request, *args, **kwargs):            
-        if request.is_ajax():
-            self.template_name_suffix = self.ajax_template
-            self.form_class = self.ajax_form
-        return super(NoteUpdateView, self).get(request, *args, **kwargs)
+    form_class = NoteForm
+    template_name_suffix = "_ajax_form"
         
     def get_form_kwargs(self):
         kwargs = super(NoteUpdateView, self).get_form_kwargs()
@@ -48,8 +42,8 @@ class NoteUpdateView(UpdateView):
 
 class NoteFollowerUpdateView(NoteUpdateView):
     queryset = NoteFollower.objects.all() 
-    ajax_form = NoteFollowerForm 
-    ajax_template = "_form"
+    form_class = NoteFollowerForm 
+    template_name_suffix = "_form"
     
     def get_object(self, queryset=None):    
         self.object = None
