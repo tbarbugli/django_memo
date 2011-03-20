@@ -1,1 +1,0 @@
-[{"pk": 1, "model": "memo.color", "fields": {"code": "#FF0000", "name": "red"}}, {"pk": 2, "model": "memo.color", "fields": {"code": "#234F32", "name": "green"}}, {"pk": 3, "model": "memo.color", "fields": {"code": "#FFE761", "name": "yellow"}}]

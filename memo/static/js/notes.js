@@ -19,7 +19,7 @@ function init_notes()
     containment: "#notes",
     create: function() {if($(this).hasClass("shake")){$(this).effect("bounce", "fast");}},
     stop : function (event, ui) { 
-      var form = $(this).children("form");
+      var form = $(this).children().children("form");
       form.find(".text").val($(this).find(".editable").text()); 
       form.find(".top").val(ui.position.top);
       form.find(".left").val(ui.position.left);  
@@ -32,11 +32,6 @@ function init_notes()
   });
   $("input, select").change(save_note); 
   $("section").blur(save_note); 
-  $(".color_buttons").children("label").click(function(){
-      var note= $(this).parent().parent().parent().parent(); 
-      color = $(this).css("background-color");
-      note.css("background", color);
-  });   
   $("a.remove").unbind('click');                     
   $("a.remove").click(function(){       
     $.ajax({

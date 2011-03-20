@@ -1,14 +1,13 @@
 from django.forms import *
+from memo.widgets import * 
 from memo.models import *
-from memo.widget import ColorRadioSelect
 
 class NoteForm(ModelForm):       
-    color = ModelChoiceField(Color.objects.all(), empty_label=None, 
-        widget=ColorRadioSelect)
 
     class Meta:
         model = Note  
-        widgets = { 
+        widgets = {  
+            'is_public': ShareCheckBox(attrs={'label': 'Share'}),
             'text': HiddenInput(attrs={'class': 'text'}), 
             'top': HiddenInput(attrs={'class': 'top'}),
             'left': HiddenInput(attrs={'class': 'left'}),

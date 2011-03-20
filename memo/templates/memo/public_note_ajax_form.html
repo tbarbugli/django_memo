@@ -1,4 +1,5 @@
-<div {% if not form.instance.pk %} id="empty_form" {% endif %} class="note ui-widget-content" style="left:{{form.left.value}}px;top:{{form.top.value}}px;position:absolute;background:{{ form.color.label }};">
+<div {% if not form.instance.pk %} id="empty_form" {% endif %} class="note" style="left:{{form.left.value}}px;top:{{form.top.value}}px;position:absolute;">
+  <div class="box">
   {% if form.instance.pk %}
     <form action="/memo/notes/{{ form.instance.pk }}/"> 
   {% else %}
@@ -17,6 +18,7 @@
             {{ field }}      
       {% endfor %}   
     </div>                                                                   
+  </div>  
   </div>
 </form>  
 </div>

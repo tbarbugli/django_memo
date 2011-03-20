@@ -1,59 +1,58 @@
-from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.views.generic import UpdateView, CreateView, DeleteView
+from django.views.generic.detail import SingleObjectMixin
 from django.template import RequestContext
 from django.http import Http404 
-from memo.models import Color, Note, NoteFollower
+from memo.models import Note, NoteFollower
 from memo.forms import NoteForm, NoteFollowerForm
 from django.contrib.auth.views import redirect_to_login
 from django.core.urlresolvers import reverse
 
-class NoteDeleteView(DeleteView):
+class UserNote(SingleObjectMixin):
+    """
+    this class in meant to be used to create Mixins
+    that checks the ownerships during get_object
+    by checking that object_ownership_check
+    and user are the same
+    
+    """
+    
+    object = None
+    request = None
+    object_ownership_check = "owner"
+    
+    def get_object(self, queryset=None):   
+        self.object = None
+        user = self.request.user
+        obj = SingleObjectMixin.get_object(self, queryset)
+        owner = getattr(obj, self.object_ownership_check, None)
+        if owner is None or owner != user:            
+            raise Http404(u"User is not allowed") 
+        return obj
+
+class NoteDeleteView(UserNote, DeleteView):
     queryset = Note.objects.all()
     success_url = "/memo"    
     
-    def get_object(self, queryset=None):    
-        self.object = None
-        user = self.request.user
-        obj = super(NoteDeleteView, self).get_object(queryset)
-        if obj.owner != user:            
-            raise Http404(u"User is not allowed") 
-        return obj
-        
-class NoteUpdateView(UpdateView):
+    def get(self, request, *args, **kwargs):      
+        return self.post(request, *args, **kwargs)
+            
+class NoteUpdateView(UserNote, UpdateView):
     queryset = Note.objects.all()        
     form_class = NoteForm
     template_name_suffix = "_ajax_form"
         
-    def get_form_kwargs(self):
+    def get_form_kwargs(self): 
+        """
+        use the object id as form prefix
+        """ 
         kwargs = super(NoteUpdateView, self).get_form_kwargs()
         kwargs["prefix"] = self.object.id
         return kwargs
         
-    def get_object(self, queryset=None):    
-        self.object = None
-        user = self.request.user
-        obj = super(NoteUpdateView, self).get_object(queryset)
-        if obj.owner != user:            
-            raise Http404(u"User is not allowed") 
-        return obj
-
-class NoteFollowerUpdateView(NoteUpdateView):
-    queryset = NoteFollower.objects.all() 
-    form_class = NoteFollowerForm 
-    template_name_suffix = "_form"
-    
-    def get_object(self, queryset=None):    
-        self.object = None
-        user = self.request.user
-        obj = super(NoteUpdateView, self).get_object(queryset)
-        if obj.follower != user:            
-            raise Http404(u"User is not allowed") 
-        return obj
-
-class NoteCreateView(CreateView):
+class NoteCreateView(UserNote, CreateView):
     model = Note     
     
     def post(self, request, *args, **kwargs):  
@@ -61,24 +60,26 @@ class NoteCreateView(CreateView):
             raise Http404(u"User is not allowed")    
         return super(NoteCreateView, self).post(request, *args, **kwargs)
 
+class NoteFollowerUpdateView(NoteUpdateView):
+    queryset = NoteFollower.objects.all() 
+    form_class = NoteFollowerForm 
+    template_name_suffix = "_form"
+    object_ownership_check = "follower"  
+            
 @login_required
 def follow(request, note_id):
-    note = Note.objects.get(id= note_id)
+    note = get_object_or_404(Note, pk= note_id, is_public= True)
     fn = NoteFollower(note_id =note_id, follower= request.user) 
     fn.top = note.top
-    fn.left = note.left    
-    try:  
-        fn.clean()                
-    except ValidationError, e:   
-        return HttpResponse("Something went wrong: %s" % e)
-    fn.save()
-    return HttpResponse() 
+    fn.left = note.left
+    fn.save()    
+    return HttpResponse("") 
     
 @login_required
 def unfollow(request, note_id):   
     NoteFollower.objects.filter(follower= request.user, 
                                 note__id= note_id).delete()
-    return HttpResponse()
+    return HttpResponse("")
                           
 def dashboard(request, user_id= None):
     """
@@ -97,11 +98,10 @@ def dashboard(request, user_id= None):
     else:
         queryset = Note.objects.filter(owner= request.user) 
         template_name = "memo/note_list.html"             
-        initial = {'owner': request.user}
-        initial['color'] = Color.default()            
+        initial = {'owner': request.user}            
         forms = [NoteForm(initial= initial)] 
-        f_qs = NoteFollower.objects.filter(follower= request.user) 
-        f_qs = f_qs.exclude(note__visibility= "private")           
+        f_qs = NoteFollower.objects.filter(follower= request.user)
+        f_qs = NoteFollower.objects.exclude(note__is_public= False)        
         followings = [NoteFollowerForm(instance= nf, prefix= nf.id) for nf in f_qs]
 
     forms += [NoteForm(instance= note, prefix= note.id) for note in queryset]          
@@ -112,4 +112,3 @@ def dashboard(request, user_id= None):
                               context,
                               context_instance=RequestContext(request))     
         
-    

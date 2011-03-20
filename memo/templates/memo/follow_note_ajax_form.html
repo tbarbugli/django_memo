@@ -1,4 +1,5 @@
-<div class="note ui-widget-content" style="left:{{form.left.value}}px;top:{{form.top.value}}px;position:absolute;background:{{ form.instance.note.color }};">
+<div class="note" style="left:{{form.left.value}}px;top:{{form.top.value}}px;position:absolute;">
+  <div class="box">
   <form action="/memo/follower_notes/{{ form.instance.pk }}/"> 
   <div class="text-side">  
    <section class="editable">{{ form.instance.note.text }}</section>   
@@ -9,6 +10,7 @@
             {{ field }}          
       {% endfor %}   
     </div>                                                                   
+  </div> 
   </div>
 </form>  
 </div>

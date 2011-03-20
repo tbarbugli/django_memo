@@ -1,11 +1,5 @@
-{% extends 'memo/layout.html' %}  
-{% if form.instance.pk %}
-  <form action="/memo/notes/{{ form.instance.pk }}/"> 
-{% else %}
-  <form action="/memo/notes/add/"> 
-{% endif %}
-  {% block body_middle %} 
-    {{ form.as_p }}
-  <input type="submit" />
-  </form>    
-{% endblock %} 
+{% load uni_form_tags %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form.css" type="text/css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/default.uni-form.css" type="text/css" />
+  
+{{ form|as_uni_form }}
