@@ -7,7 +7,7 @@ function save_note(){
     $.ajax({
         type: 'POST',
         url: form.attr("action"),
-        data: form.serialize(),
+        data: form.serialize()
       });
 }
 
@@ -26,7 +26,7 @@ function init_notes()
       $.ajax({
         type: 'POST',
         url: form.attr("action"),
-        data: form.serialize(),
+        data: form.serialize()
       });    
     }
   });
